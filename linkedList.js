@@ -157,18 +157,18 @@ export { LinkedList };
 
 //TESTING
 
-const myList = new LinkedList();
-myList.append("item 1");
-myList.append("item 2");
-myList.append("item 4");
-myList.insertAt(2, "item 3");
-console.log("list size: " + myList.size());
-console.log("head: " + myList.getHead().value);
-console.log("tail: " + myList.getTail().value);
-console.log("item at index 1: " + myList.at(1).value);
-console.log("does it contain item 2: " + myList.contains("item 2"));
-console.log("what is the index of item 2: " + myList.find("item 2"));
-console.log("does it contain item 45: " + myList.contains("item 45"));
-console.log(myList.toString());
-myList.pop();
-console.log("tail after pop: " + myList.getTail().value);
+// const myList = new LinkedList();
+// myList.append("item 1");
+// myList.append("item 2");
+// myList.append("item 4");
+// myList.insertAt(2, "item 3");
+// console.log("list size: " + myList.size());
+// console.log("head: " + myList.getHead().value);
+// console.log("tail: " + myList.getTail().value);
+// console.log("item at index 1: " + myList.at(1).value);
+// console.log("does it contain item 2: " + myList.contains("item 2"));
+// console.log("what is the index of item 2: " + myList.find("item 2"));
+// console.log("does it contain item 45: " + myList.contains("item 45"));
+// console.log(myList.toString());
+// myList.pop();
+// console.log("tail after pop: " + myList.getTail().value);
