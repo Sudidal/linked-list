@@ -33,6 +33,38 @@ class LinkedList {
       this.head = newNode;
     }
   }
+  insertAt(index, value) {
+    let curIndex = 0;
+    let curNode = this.head;
+    while (curNode) {
+      if (curIndex === index) {
+        const newNode = Node(value);
+        if (!this.head) {
+          this.head = newNode;
+          this.tail = newNode;
+        } else {
+          if (curNode === this.head) {
+            newNode.next = this.head;
+            this.head.prev = newNode;
+            this.head = newNode;
+          } else if (curNode === this.tail) {
+            newNode.prev = this.tail.prev;
+            newNode.next = this.tail;
+            this.tail.prev.next = newNode;
+            this.tail.prev = newNode;
+          } else {
+            newNode.next = curNode;
+            newNode.prev = curNode.prev;
+            curNode.prev.next = newNode;
+            curnode.next.prev = newNode;
+            curNode.prev = newNode;
+          }
+        }
+      }
+      curIndex++;
+      curNode = curNode.next;
+    }
+  }
   size() {
     let count = 0;
     let curNode = this.head;
@@ -84,6 +116,28 @@ class LinkedList {
     }
     return null;
   }
+  removeAt(index) {
+    let curIndex = 0;
+    let curNode = this.head;
+    while (curNode) {
+      if (curIndex === index) {
+        if (curNode === this.head) {
+          this.head = curNode.next;
+          this.head.next = null;
+        } else if (curNode === this.tail) {
+          this.tail = curNode.prev;
+          this.tail.prev = null;
+        } else {
+          curNode.next.prev = curNode.prev;
+          curNode.prev.next = curNode.next;
+        }
+        return true;
+      }
+      curIndex++;
+      curNode = curNode.next;
+    }
+    return false;
+  }
   toString() {
     let curNode = this.head;
     let string = "Empty List";
@@ -103,17 +157,18 @@ export { LinkedList };
 
 //TESTING
 
-// const myList = new LinkedList();
-// myList.append("item 2");
-// myList.append("item 3");
-// myList.prepend("item 1");
-// console.log("list size: " + myList.size());
-// console.log("head: " + myList.getHead().value);
-// console.log("tail: " + myList.getTail().value);
-// console.log("item at index 1: " + myList.at(1).value);
-// console.log("does it contain item 2: " + myList.contains("item 2"));
-// console.log("what is the index of item 2: " + myList.find("item 2"));
-// console.log("does it contain item 45: " + myList.contains("item 45"));
-// console.log(myList.toString());
-// myList.pop();
-// console.log("tail after pop: " + myList.getTail().value);
+const myList = new LinkedList();
+myList.append("item 1");
+myList.append("item 2");
+myList.append("item 4");
+myList.insertAt(2, "item 3");
+console.log("list size: " + myList.size());
+console.log("head: " + myList.getHead().value);
+console.log("tail: " + myList.getTail().value);
+console.log("item at index 1: " + myList.at(1).value);
+console.log("does it contain item 2: " + myList.contains("item 2"));
+console.log("what is the index of item 2: " + myList.find("item 2"));
+console.log("does it contain item 45: " + myList.contains("item 45"));
+console.log(myList.toString());
+myList.pop();
+console.log("tail after pop: " + myList.getTail().value);
