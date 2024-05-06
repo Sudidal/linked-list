@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "linked-list",
+  "name": "linked-list-oxide",
   "version": "1.0.0",
   "description": "This is my implementation of linked list for JavaScript",
   "main": "linkedList.js",
@@ -8,6 +8,6 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "oxide-dev",
   "license": "ISC"
 }
