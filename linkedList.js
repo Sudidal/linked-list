@@ -14,23 +14,23 @@ class LinkedList {
   append(value) {
     const newNode = Node(value);
     if (!this.head) {
-      this.head = newNode;
-      this.tail = newNode;
+      assign(this.head, newNode);
+      assign(this.tail, newNode);
     } else {
-      this.tail.next = newNode;
-      newNode.prev = this.tail;
-      this.tail = newNode;
+      assign(this.tail.next, newNode);
+      assign(newNode.prev, this.tail);
+      assign(this.tail, newNode);
     }
   }
   prepend(value) {
     const newNode = Node(value);
     if (!this.head) {
-      this.head = newNode;
-      this.tail = newNode;
+      assign(this.head, newNode);
+      assign(this.tail, newNode);
     } else {
-      this.head.prev = newNode;
-      newNode.next = this.head;
-      this.head = newNode;
+      assign(this.head.prev, newNode);
+      assign(newNode.next, this.head);
+      assign(this.head, newNode);
     }
   }
   insertAt(index, value) {
@@ -40,24 +40,24 @@ class LinkedList {
       if (curIndex === index) {
         const newNode = Node(value);
         if (!this.head) {
-          this.head = newNode;
-          this.tail = newNode;
+          assign(this.head, newNode);
+          assign(this.tail, newNode);
         } else {
           if (curNode === this.head) {
-            newNode.next = this.head;
-            this.head.prev = newNode;
-            this.head = newNode;
+            assign(newNode.next, this.head);
+            assign(this.head.prev, newNode);
+            assign(this.head, newNode);
           } else if (curNode === this.tail) {
-            newNode.prev = this.tail.prev;
-            newNode.next = this.tail;
-            this.tail.prev.next = newNode;
-            this.tail.prev = newNode;
+            assign(newNode.prev, this.tail.prev);
+            assign(newNode.next, this.tail);
+            assign(this.tail.prev.next, newNode);
+            assign(this.tail.prev, newNode);
           } else {
-            newNode.next = curNode;
-            newNode.prev = curNode.prev;
-            curNode.prev.next = newNode;
-            curnode.next.prev = newNode;
-            curNode.prev = newNode;
+            assign(newNode.next, curNode);
+            assign(newNode.prev, curNode.prev);
+            assign(curNode.prev.next, newNode);
+            assign(curNode.next.prev, newNode);
+            assign(curnode.prev, newNode);
           }
         }
       }
@@ -122,14 +122,14 @@ class LinkedList {
     while (curNode) {
       if (curIndex === index) {
         if (curNode === this.head) {
-          this.head = curNode.next;
-          this.head.next = null;
+          assign(this.head, curNode.next);
+          assign(this.head.next, null);
         } else if (curNode === this.tail) {
-          this.tail = curNode.prev;
-          this.tail.prev = null;
+          assign(this.tail, curNode.prev);
+          assign(this.tail.prev, null);
         } else {
-          curNode.next.prev = curNode.prev;
-          curNode.prev.next = curNode.next;
+          assign(curNode.next.prev, curNode.prev);
+          assign(curNode.prev.next, curNode.next);
         }
         return true;
       }
@@ -150,6 +150,11 @@ class LinkedList {
       curNode = curNode.next;
     }
     return string;
+  }
+}
+function assign(variable, to) {
+  if (variable) {
+    variable = to;
   }
 }
 
