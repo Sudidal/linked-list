@@ -1,179 +1,175 @@
-function Node(_value) {
-  let value = _value;
-  let next = null;
-  let prev = null;
-  return { value, next, prev };
-}
+import { Node } from "./node";
 
 class LinkedList {
-  constructor() {
-    this.head = null;
-    this.tail = null;
-  }
+  #head = null;
+  #tail = null;
+
+  constructor() {}
 
   append(value) {
-    const newNode = Node(value);
-    if (!this.head) {
-      assign(this.head, newNode);
-      assign(this.tail, newNode);
+    const newNode = new Node(value, null, null);
+    if (!this.#head) {
+      this.#setFirstNode(newNode);
     } else {
-      assign(this.tail.next, newNode);
-      assign(newNode.prev, this.tail);
-      assign(this.tail, newNode);
+      this.#setTailNode(newNode);
     }
   }
   prepend(value) {
-    const newNode = Node(value);
-    if (!this.head) {
-      assign(this.head, newNode);
-      assign(this.tail, newNode);
+    const newNode = new Node(value, null, null);
+    if (!this.#head) {
+      this.#setFirstNode(newNode);
     } else {
-      assign(this.head.prev, newNode);
-      assign(newNode.next, this.head);
-      assign(this.head, newNode);
+      this.#setHeadNode(newNode);
     }
   }
-  insertAt(index, value) {
+  insertAt(value, index) {
+    // insertion is outside of the loop, to be able
+    // to insert elements event if the list is empty
     let curIndex = 0;
-    let curNode = this.head;
-    while (curNode) {
+    let curNode = this.#head;
+    while (curNode && curNode.getNext()) {
       if (curIndex === index) {
-        const newNode = Node(value);
-        if (!this.head) {
-          assign(this.head, newNode);
-          assign(this.tail, newNode);
-        } else {
-          if (curNode === this.head) {
-            assign(newNode.next, this.head);
-            assign(this.head.prev, newNode);
-            assign(this.head, newNode);
-          } else if (curNode === this.tail) {
-            assign(newNode.prev, this.tail.prev);
-            assign(newNode.next, this.tail);
-            assign(this.tail.prev.next, newNode);
-            assign(this.tail.prev, newNode);
-          } else {
-            assign(newNode.next, curNode);
-            assign(newNode.prev, curNode.prev);
-            assign(curNode.prev.next, newNode);
-            assign(curNode.next.prev, newNode);
-            assign(curnode.prev, newNode);
-          }
-        }
+        break;
       }
       curIndex++;
-      curNode = curNode.next;
+      curNode = curNode.getNext();
     }
-  }
-  size() {
-    let count = 0;
-    let curNode = this.head;
-    while (curNode) {
-      curNode = curNode.next;
-      count++;
-    }
-    return count;
-  }
-  getHead() {
-    return this.head;
-  }
-  getTail() {
-    return this.tail;
-  }
-  at(index) {
-    let counter = 0;
-    let curNode = this.head;
-    while (curNode) {
-      if (counter === index) {
-        return curNode;
+    const newNode = new Node(value, null, null);
+    if (!this.#head) {
+      this.#setFirstNode(newNode);
+    } else {
+      if (curNode === this.#head) {
+        this.#setHeadNode(newNode);
+      } else if (curNode === this.#tail) {
+        this.#setTailNode(newNode);
+      } else {
+        this.insertNodeAfter(newNode, curNode);
       }
-      counter++;
-      curNode = curNode.next;
     }
-    return null;
   }
+
   pop() {
-    this.tail = this.tail.prev;
-    this.tail.next = null;
-  }
-  contains(value) {
-    let curNode = this.head;
-    while (curNode) {
-      if (curNode.value === value) return true;
-      curNode = curNode.next;
+    if (this.#tail) {
+      this.#removeTailNode();
     }
-    return false;
-  }
-  find(value) {
-    let index = 0;
-    let curNode = this.head;
-    while (curNode) {
-      if (curNode.value === value) {
-        return index;
-      }
-      index++;
-      curNode = curNode.next;
-    }
-    return null;
   }
   removeAt(index) {
     let curIndex = 0;
-    let curNode = this.head;
+    let curNode = this.#head;
     while (curNode) {
       if (curIndex === index) {
-        if (curNode === this.head) {
-          assign(this.head, curNode.next);
-          assign(this.head.next, null);
-        } else if (curNode === this.tail) {
-          assign(this.tail, curNode.prev);
-          assign(this.tail.prev, null);
+        if (curNode === this.#head) {
+          this.#removeHeadNode();
+          return;
+        } else if (curNode === this.#tail) {
+          this.#removeTailNode();
+          return;
         } else {
-          assign(curNode.next.prev, curNode.prev);
-          assign(curNode.prev.next, curNode.next);
+          this.removeSorroundedNode(curNode);
+          return;
         }
-        return true;
       }
       curIndex++;
-      curNode = curNode.next;
+      curNode = curNode.getNext();
+    }
+  }
+
+  getHead() {
+    return this.#head;
+  }
+  getTail() {
+    return this.#tail;
+  }
+  contains(value) {
+    let curNode = this.#head;
+    while (curNode) {
+      if (curNode.getValue() === value) {
+        return true;
+      }
+      curNode = curNode.getNext();
     }
     return false;
   }
-  toString() {
-    let curNode = this.head;
-    let string = "Empty List";
-    if (curNode) string = "";
-    while (curNode !== null) {
-      if (curNode.prev) {
-        string += " -> ";
+  getItemByIndex(index) {
+    let curIndex = 0;
+    let curNode = this.#head;
+    while (curNode) {
+      if (curIndex === index) {
+        return curNode;
       }
-      string += `(${curNode.value})`;
-      curNode = curNode.next;
+      curIndex++;
+      curNode = curNode.getNext();
     }
-    return string;
+    return null;
   }
-}
-function assign(variable, to) {
-  if (variable) {
-    variable = to;
+  getItemByValue(value) {
+    let curNode = this.#head;
+    while (curNode) {
+      if (curNode.getValue() === value) {
+        return curNode;
+      }
+      curNode = curNode.getNext();
+    }
+    return null;
+  }
+  getSize() {
+    let count = 0;
+    let curNode = this.#head;
+    while (curNode) {
+      count++;
+      curNode = curNode.getNext();
+    }
+    return count;
+  }
+
+  toString() {
+    let result = "";
+    let curNode = this.#head;
+    if (!curNode) result = "Empty List";
+    while (curNode) {
+      result += curNode.getValue();
+      if (curNode.getNext()) {
+        result += " -> ";
+      }
+      curNode = curNode.getNext();
+    }
+    return result;
+  }
+
+  #setFirstNode(node) {
+    this.#head = node;
+    this.#tail = node;
+    this.#head.setNext(this.#tail);
+    this.#tail.setPrev(this.#head);
+  }
+  #setHeadNode(node) {
+    node.setNext(this.#head);
+    this.#head.setPrev(node);
+    this.#head = node;
+  }
+  #setTailNode(node) {
+    node.setPrev(this.#tail);
+    this.#tail.setNext(node);
+    this.#tail = node;
+  }
+  insertNodeAfter(node, placeNode) {
+    node.setNext(placeNode.getNext());
+    node.setPrev(placeNode);
+    placeNode.getNext().setPrev(node);
+    placeNode.setNext(node);
+  }
+  #removeHeadNode() {
+    this.#head = this.#head.getNext();
+    this.#head.setPrev(null);
+  }
+  #removeTailNode() {
+    this.#tail = this.#tail.getPrev();
+    this.#tail.setNext(null);
+  }
+  removeSorroundedNode(node) {
+    node.getPrev().setNext(node.getNext());
+    node.getNext.setPrev(node.getPrev);
   }
 }
 
 export { LinkedList };
-
-//TESTING
-
-// const myList = new LinkedList();
-// myList.append("item 1");
-// myList.append("item 2");
-// myList.append("item 4");
-// myList.insertAt(2, "item 3");
-// console.log("list size: " + myList.size());
-// console.log("head: " + myList.getHead().value);
-// console.log("tail: " + myList.getTail().value);
-// console.log("item at index 1: " + myList.at(1).value);
-// console.log("does it contain item 2: " + myList.contains("item 2"));
-// console.log("what is the index of item 2: " + myList.find("item 2"));
-// console.log("does it contain item 45: " + myList.contains("item 45"));
-// console.log(myList.toString());
-// myList.pop();
-// console.log("tail after pop: " + myList.getTail().value);

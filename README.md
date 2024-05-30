@@ -1,3 +1,6 @@
-This is my implementation of linked list for JavaScript
+# LinkedList For JavaScript
 
-you can use this code as you want
+[NPM Package](https://www.npmjs.com/package/linked-list-oxide)
+[GitHub Rep](https://github.com/Sudidal/linked-list)
+
+### FREE PALESTINE 🇵🇸
